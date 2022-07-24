@@ -2,7 +2,7 @@ use hashmap_macro::hashmap;
 use std::collections::HashMap;
 
 #[test]
-fn test_hashmap_tuple() {
+fn test_hashmap_tuples() {
     let mut example = HashMap::new();
     assert_eq!(hashmap!(), example);
 
