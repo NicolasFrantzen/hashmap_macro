@@ -23,10 +23,6 @@ macro_rules! hashmap {
     ({ $($tt:tt)* }) => (
         hashmap!($($tt)*)
     );
-    // match (key, val), ...
-    ($(($key:expr, $val:expr)$(,)?)+) => (
-        hashmap!($($key => $val)*)
-    );
     // match key => val, ...
     ($($key:expr => $val:expr$(,)?)+) => (
         {
@@ -36,6 +32,10 @@ macro_rules! hashmap {
 
             hashmap
         }
+    );
+    // match (key, val), ...
+    ($(($key:expr, $val:expr)$(,)?)+) => (
+        ::std::collections::HashMap::from([$(($key, $val)),+])
     );
 }
 
