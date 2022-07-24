@@ -2,9 +2,15 @@
 
 //! Macro definition for creating HashMaps in the same style as the vec! macro for Vec.
 //!
-//! TODO: Example
+//! Following example shows usage:
+//! ```
+//! use hashmap_macro::hashmap;
+//!
+//! let hashmap1 = hashmap!("foo" => 42, "bar" => 69);
+//! assert_eq!(hashmap1, std::collections::HashMap::from([("foo", 42), ("bar", 69)]));
+//! ```
 
-/// Function for counting expressions.
+/// Macro for counting expressions.
 #[doc(hidden)]
 #[macro_export]
 macro_rules! count_expr {
@@ -13,7 +19,36 @@ macro_rules! count_expr {
 }
 
 /// Creates a HashMap containing the arguments.
-/// TODO: Doc test
+/// The items are counted an the map is created with capacity of the element count.
+///
+/// Create a HashMap using arms syntax:
+/// ```
+/// # #[macro_use] extern crate hashmap_macro;
+/// let hashmap = hashmap!("foo" => 42, "bar" => 69, "baz" => 666);
+///
+/// assert_eq!(hashmap["foo"], 42);
+/// assert_eq!(hashmap["bar"], 69);
+/// assert_eq!(hashmap["baz"], 666);
+/// ```
+/// or with block scope:
+/// ```
+/// # #[macro_use] extern crate hashmap_macro;
+/// let hashmap = hashmap!({"foo" => 42, "bar" => 69, "baz" => 666});
+///
+/// assert_eq!(hashmap["foo"], 42);
+/// assert_eq!(hashmap["bar"], 69);
+/// assert_eq!(hashmap["baz"], 666);
+/// ```
+///
+/// or with tuple syntax (similar to the the From trait):
+/// ```
+/// # #[macro_use] extern crate hashmap_macro;
+/// let hashmap = hashmap!(("foo", 42), ("bar", 69), ("baz", 666));
+///
+/// assert_eq!(hashmap["foo"], 42);
+/// assert_eq!(hashmap["bar"], 69);
+/// assert_eq!(hashmap["baz"], 666);
+/// ```
 #[macro_export]
 macro_rules! hashmap {
     () => (
@@ -37,34 +72,4 @@ macro_rules! hashmap {
     ($(($key:expr, $val:expr)$(,)?)+) => (
         ::std::collections::HashMap::from([$(($key, $val)),+])
     );
-}
-
-#[cfg(test)]
-mod tests {
-    #[test]
-    fn test_hashmap_arms() {
-        let hashmap = hashmap!("foo" => 42, "bar" => 69, "baz" => 666);
-
-        assert_eq!(hashmap["foo"], 42);
-        assert_eq!(hashmap["bar"], 69);
-        assert_eq!(hashmap["baz"], 666);
-    }
-
-    #[test]
-    fn test_hashmap_scoped_arms() {
-        let hashmap = hashmap!({"foo" => 42, "bar" => 69, "baz" => 666});
-
-        assert_eq!(hashmap["foo"], 42);
-        assert_eq!(hashmap["bar"], 69);
-        assert_eq!(hashmap["baz"], 666);
-    }
-
-    #[test]
-    fn test_hashmap_tuples() {
-        let hashmap = hashmap!(("foo", 42), ("bar", 69), ("baz", 666));
-
-        assert_eq!(hashmap["foo"], 42);
-        assert_eq!(hashmap["bar"], 69);
-        assert_eq!(hashmap["baz"], 666);
-    }
 }
